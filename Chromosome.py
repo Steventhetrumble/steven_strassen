@@ -5,15 +5,6 @@ from create_list import *
 import sys
 from collections import Counter, defaultdict
 
-def duplicates(lst):
-    cnt= Counter(lst)
-    return [key for key in cnt.keys() if cnt[key]> 1]
-
-def indices(lst, items= None):
-    items, ind= set(lst) if items is None else items, defaultdict(list)
-    for i, v in enumerate(lst):
-        if v in items: ind[v].append(i)
-    return ind
 
 def sort_matrix2(matrix):
     col_label_list = set(range(0,len(matrix[0])))
@@ -31,12 +22,14 @@ def sort_matrix2(matrix):
 
     return np.array(new_row_list)
 
+
+
 class Chromosome():
 
-    def __init__(self, multiplications):
+    def __init__(self, multiplications, list ,sols):
         self.multiplications = multiplications
-        self.options = create_list()
-        self.solution = create_sols()
+        self.options = list
+        self.solution = sols
         self.Chromosome = np.random.choice(self.options, multiplications)
         val = np.array(self.Chromosome[0].result)
         for i in range(1,multiplications,1):
@@ -44,6 +37,16 @@ class Chromosome():
         self.value = val
         self.fitness = 0
         self.determine_fitness()
+
+    def back_sub(self,upper_triangle):
+        for i in range(self.multiplications - 1, -1, -1):
+            if upper_triangle[i][i] != 1:
+                upper_triangle[i][:] = upper_triangle[i][:] / upper_triangle[i][i]
+            if any(upper_triangle[:][i]) != 0:
+                for j in range(0, i, 1):
+                    upper_triangle[j] = upper_triangle[j] - upper_triangle[i] * upper_triangle[j][i]
+
+        return upper_triangle[:self.multiplications, self.multiplications:]
 
 
     def update_value(self):
@@ -68,13 +71,17 @@ class Chromosome():
         i = 1 / (1 + h)
         self.fitness = i
         if self.fitness == 1:
-            print self.Chromosome
+
+            print self.value
+            print self.find_X()
+            print np.dot(self.value,self.find_X())
             print "YAAAAAAY"
             sys.exit()
 
     def find_X(self):
         X = sort_matrix2(np.concatenate((self.value,self.solution),axis=1))
-        X = X[0:self.multiplications,self.multiplications:]
+        X = self.back_sub(X)
+        #X = X[0:self.multiplications,self.multiplications:]
         return X
 
     def check_X(self, X):
@@ -97,27 +104,23 @@ class Chromosome():
         X = self.find_X()
         print X
         index = self.check_X(X)
-        print index
         choice = np.random.choice(index)
-        print choice
         old_fitness = self.fitness
         old_item = self.Chromosome[choice]
-
-        print len(self.solution)
         for i in range(0,len(self.options),1):
             self.Chromosome[choice] = self.options[i]
             self.update_value()
-            if self.fitness > old_fitness:
+            if self.fitness >= old_fitness:
                 old_item = self.Chromosome[choice]
                 old_fitness = self.fitness
-                break
+                #break
         self.Chromosome[choice]= old_item
         self.fitness = old_fitness
 
 
 
 if __name__ == "__main__":
-    for i in range(0,100,1):
+    for i in range(0,10000,1):
         new_Chrom = Chromosome(7)
         print new_Chrom.value
         print new_Chrom.fitness
