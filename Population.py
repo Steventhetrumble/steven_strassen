@@ -20,7 +20,7 @@ class Population():
         self.population = []
         self.multiplications = multiplications
         self.size = size
-        self.solve = create_list()
+        self.solve, self.options = create_list()
         self.sols = create_sols()
         for i in range(0, self.size,1):
             x = Chromosome(multiplications, self.solve ,self.sols)
@@ -40,12 +40,12 @@ class Population():
 
 
 if __name__ == "__main__":
-    J =  Population(26,7)
+    J =  Population(40,7)
 
-    for i in range(0,1000,1):
+    for i in range(0,100,1):
         for item in J.population:
             item.local_search()
-            print item.fitness
+            #print item.fitness
 
 
 

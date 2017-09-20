@@ -41,7 +41,7 @@ def create_list():
                     temporary.append([options[row][col] * options[row2][col2]])
             new_item = item(len(options), row, row2, np.array(temporary))
             possibilities.append(new_item)
-    return np.array(possibilities)
+    return np.array(possibilities), np.array(options)
 
 def create_sols():
     C1 = np.array([[1], [0], [0], [0], [0], [1], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]])
