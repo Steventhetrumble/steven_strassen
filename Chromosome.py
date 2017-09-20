@@ -56,6 +56,8 @@ class Chromosome():
         self.value = val
         self.determine_fitness()
 
+    
+
     def determine_fitness(self):
         #self.partition = np.concatenate((self.value, self.solution), axis=1)
 
@@ -71,11 +73,12 @@ class Chromosome():
         i = 1 / (1 + h)
         self.fitness = i
         if self.fitness == 1:
-
-            print self.value
-            print self.find_X()
-            print np.dot(self.value,self.find_X())
-            print "YAAAAAAY"
+            with open("strassen_save.txt","a+") as f:
+                X = self.find_X()
+                string = "A=\n %s \n  X = \n %s \n C= \n %s \n" % (self.value, X ,np.dot(self.value,X))
+                f.write(string)
+            #print "YAAAAAAY"
+            f.close()
             sys.exit()
 
     def find_X(self):
@@ -102,7 +105,7 @@ class Chromosome():
 
     def local_search(self):
         X = self.find_X()
-        print X
+        #print X
         index = self.check_X(X)
         choice = np.random.choice(index)
         old_fitness = self.fitness
