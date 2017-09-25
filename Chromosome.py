@@ -3,8 +3,6 @@ from Item import item
 import random
 from create_list import *
 import sys
-from collections import Counter, defaultdict
-
 
 def sort_matrix2(matrix):
     col_label_list = set(range(0,len(matrix[0])))
@@ -37,6 +35,7 @@ class Chromosome():
         self.value = val
         self.fitness = 0
         self.determine_fitness()
+        self.stop = False
 
     def back_sub(self,upper_triangle):
         for i in range(self.multiplications - 1, -1, -1):
@@ -56,8 +55,6 @@ class Chromosome():
         self.value = val
         self.determine_fitness()
 
-    
-
     def determine_fitness(self):
         #self.partition = np.concatenate((self.value, self.solution), axis=1)
 
@@ -73,13 +70,7 @@ class Chromosome():
         i = 1 / (1 + h)
         self.fitness = i
         if self.fitness == 1:
-            with open("strassen_save.txt","a+") as f:
-                X = self.find_X()
-                string = "A=\n %s \n  X = \n %s \n C= \n %s \n" % (self.value, X ,np.dot(self.value,X))
-                f.write(string)
-            #print "YAAAAAAY"
-            f.close()
-            sys.exit()
+            self.stop = True
 
     def find_X(self):
         X = sort_matrix2(np.concatenate((self.value,self.solution),axis=1))
@@ -116,6 +107,8 @@ class Chromosome():
             if self.fitness >= old_fitness:
                 old_item = self.Chromosome[choice]
                 old_fitness = self.fitness
+                if self.stop == True:
+                    break
                 #break
         self.Chromosome[choice]= old_item
         self.fitness = old_fitness

@@ -40,12 +40,25 @@ class Population():
 
 
 if __name__ == "__main__":
-    J =  Population(40,7)
-
-    for i in range(0,100,1):
-        for item in J.population:
-            item.local_search()
-            #print item.fitness
+    for number in range(0,10,1):
+        J =  Population(40,7)
+        re_innit = False
+        i = 0
+        while not re_innit and i < 60:
+            for item in J.population:
+                item.local_search()
+                if item.stop == True:
+                    with open("strassen_save.txt","a+") as f:
+                        X = item.find_X()
+                        string = "A=\n %s \n  X = \n %s \n C= \n %s \n" % (item.value, X ,np.dot(item.value,X))
+                        print string
+                        f.write(string)
+                        f.close()
+                    #print "YAAAAAAY"
+                    re_innit = True
+                    break
+            i = i + 1
+            print i
 
 
 
