@@ -36,6 +36,7 @@ class Chromosome():
         self.fitness = 0
         self.determine_fitness()
         self.stop = False
+        self.encode = []
 
     def back_sub(self,upper_triangle):
         for i in range(self.multiplications - 1, -1, -1):
@@ -46,6 +47,11 @@ class Chromosome():
                     upper_triangle[j] = upper_triangle[j] - upper_triangle[i] * upper_triangle[j][i]
 
         return upper_triangle[:self.multiplications, self.multiplications:]
+
+    def encode_answer(self):
+        for item in self.Chromosome:
+            self.encode.append([item.row1,item.row2])
+        return self.encode
 
 
     def update_value(self):

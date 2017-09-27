@@ -45,13 +45,15 @@ if __name__ == "__main__":
         re_innit = False
         i = 0
         while not re_innit and i < 60:
-            for item in J.population:
-                item.local_search()
-                if item.stop == True:
+            for Chrom in J.population:
+                Chrom.local_search()
+                if Chrom.stop == True:
                     with open("strassen_save.txt","a+") as f:
-                        X = item.find_X()
-                        string = "A=\n %s \n  X = \n %s \n C= \n %s \n" % (item.value, X ,np.dot(item.value,X))
+                        X = Chrom.find_X()
+
+                        string = "A=\n %s \n  X = \n %s \n C= \n %s \n" % (Chrom.value, X ,np.dot(Chrom.value,X))
                         print string
+                        print Chrom.encode_answer()
                         f.write(string)
                         f.close()
                     #print "YAAAAAAY"
