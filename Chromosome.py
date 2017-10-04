@@ -3,6 +3,7 @@ from Item import item
 import random
 from create_list import *
 import sys
+import math
 
 def sort_matrix2(matrix):
     col_label_list = set(range(0,len(matrix[0])))
@@ -107,7 +108,11 @@ class Chromosome():
         choice = np.random.choice(index)
         old_fitness = self.fitness
         old_item = self.Chromosome[choice]
-        for i in range(0,len(self.options),1):
+        search_range = int(self.fitness * len(self.options))
+        upper_range = len(self.options) - search_range
+        start = int(random.random()*upper_range)
+        end = start + search_range
+        for i in range(start,end,1):
             self.Chromosome[choice] = self.options[i]
             self.update_value()
             if self.fitness >= old_fitness:

@@ -2,6 +2,8 @@ import numpy as np
 import random
 from create_list import *
 from Chromosome import *
+from store_unique import *
+from test3by3 import *
 
 
 
@@ -20,8 +22,8 @@ class Population():
         self.population = []
         self.multiplications = multiplications
         self.size = size
-        self.solve, self.options = create_list()
-        self.sols = create_sols()
+        self.solve, self.options = create_list2()
+        self.sols = create_sols2()
         for i in range(0, self.size,1):
             x = Chromosome(multiplications, self.solve ,self.sols)
             for j in range(0, i+1, 1):
@@ -41,24 +43,30 @@ class Population():
 
 if __name__ == "__main__":
     for number in range(0,10,1):
-        J =  Population(40,7)
+        multi = 19
+        J =  Population(40,multi)
         re_innit = False
         i = 0
-        while not re_innit and i < 60:
+        while not re_innit and i < 600:
             for Chrom in J.population:
                 Chrom.local_search()
+                print Chrom.fitness
                 if Chrom.stop == True:
-                    with open("strassen_save.txt","a+") as f:
-                        X = Chrom.find_X()
-
-                        string = "A=\n %s \n  X = \n %s \n C= \n %s \n" % (Chrom.value, X ,np.dot(Chrom.value,X))
-                        print string
-                        print Chrom.encode_answer()
-                        f.write(string)
-                        f.close()
-                    #print "YAAAAAAY"
-                    re_innit = True
-                    break
+                    tester = np.array(Chrom.encode_answer())
+                    print tester
+                    check = check_and_write(tester, '3by3.h5',multi)
+                    if check:
+                        with open("3b3.txt","a+") as f:
+                            X = Chrom.find_X()
+                            string = "A=\n %s \n  X = \n %s \n C= \n %s \n" % (Chrom.value, X ,np.dot(Chrom.value,X))
+                            print string
+                            f.write(string)
+                            f.close()
+                        #print "YAAAAAAY"
+                        re_innit = True
+                        break
+                    else:
+                        continue
             i = i + 1
             print i
 
