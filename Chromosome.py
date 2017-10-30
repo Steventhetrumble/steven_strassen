@@ -108,7 +108,7 @@ class Chromosome():
         choice = np.random.choice(index)
         old_fitness = self.fitness
         old_item = self.Chromosome[choice]
-        search_range = int(self.fitness * len(self.options))
+        search_range = int((self.fitness)*len(self.options)) #int((self.fitness)*
         upper_range = len(self.options) - search_range
         start = int(random.random()*upper_range)
         end = start + search_range

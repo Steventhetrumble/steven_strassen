@@ -1,0 +1,9 @@
+import numpy as np 
+import math
+
+
+for i in range(0,math.floor(3^9/2)):
+    print i 
+
+
+    
